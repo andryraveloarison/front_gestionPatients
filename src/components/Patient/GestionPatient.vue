@@ -2,7 +2,7 @@
   <div class="container">
       <div class="row justify-content-center">
           <div class="col-md-10">
-              <h3 class="text-center text-dark mt-3 mb-3">GESTION DES PATIENTS</h3>
+              <h3 class="text-center text-dark mt-3 mb-3">Patients</h3>
           </div>
       </div>
       <div class="row">
@@ -73,8 +73,8 @@
   </div>    
 </template>
 <script>
-import { formatDate } from '../_utils/formatDate';
-import { patientService } from '../service/patient.service';
+import { formatDate } from '../../_utils/formatDate';
+import { patientService } from '../../service/patient.service';
 import './GestionPatient.css'; // Ajustez le chemin selon l'emplacement de votre fichier CSS
 
 
