@@ -1,4 +1,103 @@
-<template>
+
+<script>
+  import { formatDate } from '../../_utils/formatDate';
+  import { medecinService } from '../../service/medecin.service';
+  import './GestionMedecin.css'; // Ajustez le chemin selon l'emplacement de votre fichier CSS
+  
+  
+  export default {
+    name: 'Medecin',
+    data () {
+      return {
+        buttonText: 'Ajouter',
+        result: {},
+        medecin:{
+                   id: '',
+                   nom: '',
+                   prenom: '',
+                   titre: '',
+        }
+      }
+    },
+    
+    created() { 
+        this.MedecinLoad();
+    },
+    mounted() {
+          console.log("mounted() called.......");
+    },
+    computed: {
+      sortedMedecins() {
+        return Array.isArray(this.result)? this.result.sort((a, b) => a.id - b.id) : [];
+      },
+    },
+  
+  
+    methods: {
+            formatDate,
+            MedecinLoad()
+            {
+                  medecinService.loadData()
+                    .then(
+                        ({data})=>{
+                          this.result = data;
+                        }
+                    );
+            },
+              
+            save()
+            {
+              this.medecin.id == '' ? this.saveData() : this.updateData();
+            },
+  
+  
+            saveData()
+            {
+              medecinService.saveData(this.medecin)
+              .then( ({data})=>{
+                  this.result.push(data)
+                  this.initaliseForm()
+                }
+              )
+  
+            },
+  
+            edit(medecin)
+            {
+              this.buttonText = "editer"
+              this.medecin = medecin;
+            },
+  
+  
+            updateData()
+            {
+                medecinService.updateData(this.medecin)
+                .then(
+                  ({data})=>{
+                    this.initaliseForm()
+                    this.buttonText = "ajouter"
+                    this.MedecinLoad();
+                  }
+                );
+  
+            },
+  
+            remove(medecin){
+                medecinService.deleteData(medecin.id);
+                alert("Supprimer");
+                this.result = this.result.filter(item => item.id !== medecin.id);
+              },
+  
+              initaliseForm(){
+                    this.medecin.nom = '';
+                    this.medecin.prenom = '',
+                    this.medecin.titre = ''
+              }
+      }
+  }
+  </script>
+  
+  <template>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -6,62 +105,42 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card-body">
-                    <form @submit.prevent="save">
+            <div class="col-md-4 card">
+                <div class="card-body ">
+                    <form @submit.prevent="save" class="form">
                     <div class="form-group">
-                        <label>Nom</label>
-                        <input type="text" v-model="patient.nom" class="form-control" >
+                        <input type="text" v-model="medecin.nom" class="form-control" placeholder="Nom">
                      
                     </div>
                     <div class="form-group">
-                        <label>email</label>
-                        <input type="email" v-model="patient.email" class="form-control"  >
+                        <input type="text" v-model="medecin.prenom" class="form-control" placeholder="Prenom">
                     </div>
                     <div class="form-group">
-                        <label>Date de naissance</label>
-                        <input type="date" v-model="patient.dateDeNaissance" class="form-control" >
+                       <input type="text" v-model="medecin.titre" class="form-control"  placeholder="Titre">
                     </div>
-                    <div class="form-group">
-                        <label>age</label>
-                        <input type="number" v-model="patient.age" class="form-control"  >
-                    </div>
-                    <div class="form-group">
-                      <label for="genre">Genre</label>
-                      <select v-model="patient.genre" class="form-control" id="genre">
-                        <option value="">Sélectionnez...</option>
-                        <option value="homme">Homme</option>
-                        <option value="femme">Femme</option>
-                      </select>
-                    </div>  
-                    <button type="submit" class="btn btn-primary mt-2">{{buttonText}}</button>
+                    <button type="submit" class="btn btn-primary  bouton">{{buttonText}}</button>
                     </form>
                 </div>
             </div>
             <div class="col-md-8">
-                    <table class="table table-dark">
+                    <table class="table">
                     <thead>
                         <tr>
                         <th scope="col" class="text-center">Nom</th>
-                        <th scope="col" class="text-center">Date de naissance</th>
-                        <th scope="col" class="text-center">age</th>
-                        <th scope="col" class="text-center">Genre</th>
-                        <th scope="col" class="text-center">email</th>
+                        <th scope="col" class="text-center">Prenom</th>
+                        <th scope="col" class="text-center">Titre</th>
                         <th scope="col" class="text-center">action</th>
                         </tr>
                     </thead>
                     <tbody>
-                          <tr v-for="patient in sortedPatients" v-bind:key="patient.id">
-  
-                            <td class="text-center">{{ patient.nom }}</td>
-                            <td class="text-center">{{ formatDate(patient.dateDeNaissance) }}</td>
-                            <td class="text-center">{{ patient.age }}</td>
-                            <td class="text-center">{{ patient.genre }}</td>
-                            <td class="text-center">{{ patient.email }}</td>
+                          <tr v-for="medecin in sortedMedecins" v-bind:key="medecin.id">
+                            <td class="text-center">{{ medecin.nom }}</td>
+                            <td class="text-center">{{ medecin.prenom }}</td>
+                            <td class="text-center">{{ medecin.titre }}</td>
                             <td>
                               <div class="d-flex justify-content-center gap-2">
-                                <button type="button" class="btn btn-warning mr-2" @click="edit(patient)">Edit</button>
-                                <button type="button" class="btn btn-danger ml-2"  @click="remove(patient)">Delete</button>
+                                <button type="button" class="btn btn-success mr-2" @click="edit(medecin)">Edit</button>
+                                <button type="button" class="btn btn-danger ml-2"  @click="remove(medecin)">Delete</button>
                               </div>
                             </td>
                             </tr>
@@ -72,105 +151,8 @@
         </div>
     </div>    
   </template>
-  <script>
-  import { formatDate } from '../../_utils/formatDate';
-  import { patientService } from '../../service/patient.service';
-  import './GestionPatient.css'; // Ajustez le chemin selon l'emplacement de votre fichier CSS
   
-  
-  export default {
-    name: 'Patient',
-    data () {
-      return {
-        buttonText: 'Ajouter',
-        result: {},
-        patient:{
-                   id: '',
-                   nom: '',
-                   email: '',
-                   age: '',
-                   dateDeNaissance:'',
-                   genre:''
-  
-        }
-      }
-    },
-    
-    created() { 
-        this.PatientLoad();
-    },
-    mounted() {
-          console.log("mounted() called.......");
-    },
-    computed: {
-      sortedPatients() {
-        return Array.isArray(this.result)? this.result.sort((a, b) => a.id - b.id) : [];
-      },
-    },
-  
-  
-    methods: {
-            formatDate,
-            PatientLoad()
-            {
-                  patientService.loadData()
-                    .then(
-                        ({data})=>{
-                          this.result = data;
-                        }
-                    );
-            },
-              
-            save()
-            {
-              this.patient.id == '' ? this.saveData() : this.updateData();
-            },
-  
-  
-            saveData()
-            {
-              patientService.saveData(this.patient)
-              .then( ({data})=>{
-                  this.result.push(data)
-                  this.initaliseForm()
-                }
-              )
-  
-            },
-  
-            edit(patient)
-            {
-              this.buttonText = "editer"
-              this.patient = patient;
-            },
-  
-  
-            updateData()
-            {
-                patientService.updateData(this.patient)
-                .then(
-                  ({data})=>{
-                    this.initaliseForm()
-                    this.buttonText = "ajouter"
-                    this.PatientLoad();
-                  }
-                );
-  
-            },
-  
-            remove(patient){
-                patientService.deleteData(patient.id);
-                alert("Supprimer");
-                this.result = this.result.filter(item => item.id !== patient.id);
-              },
-  
-              initaliseForm(){
-                    this.patient.nom = '';
-                    this.patient.email = '',
-                    this.patient.age = '',
-                    this.genre = '',
-                    this.dateDeNaissance = ''
-              }
-      }
-  }
-  </script>
+
+  <style>
+    @import './GestionMedecin.css';
+  </style>
