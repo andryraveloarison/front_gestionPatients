@@ -9,7 +9,9 @@ import './style.css'; // Ajustez le chemin selon l'emplacement de votre fichier 
   <nav>
     <RouterLink to="/patient"> Patient</RouterLink>
     <RouterLink to="/medecin"> Medecin</RouterLink>
+    <RouterLink to="/creneaux"> Creneaux</RouterLink>
   </nav>
+  
   <main>
     <RouterView />
   </main>

@@ -109,30 +109,25 @@ export default {
           </div>
       </div>
       <div class="row">
-          <div class="col-md-4">
+        <div class="col-md-4 card">
               <div class="card-body">
-                  <form @submit.prevent="save">
+                  <form @submit.prevent="save" class="form">
                   <div class="form-group">
-                      <label>Nom</label>
-                      <input type="text" v-model="patient.nom" class="form-control" >
+                      <input type="text" v-model="patient.nom" class="form-control" placeholder="nom">
                    
                   </div>
                   <div class="form-group">
-                      <label>email</label>
-                      <input type="email" v-model="patient.email" class="form-control"  >
+                      <input type="email" v-model="patient.email" class="form-control" placeholder="email" >
                   </div>
                   <div class="form-group">
-                      <label>Date de naissance</label>
-                      <input type="date" v-model="patient.dateDeNaissance" class="form-control" >
+                      <input type="date" v-model="patient.dateDeNaissance" class="form-control" placeholder="Date de naissance" >
                   </div>
                   <div class="form-group">
-                      <label>age</label>
-                      <input type="number" v-model="patient.age" class="form-control"  >
+                      <input type="number" v-model="patient.age" class="form-control" placeholder="age" >
                   </div>
                   <div class="form-group">
-                    <label for="genre">Genre</label>
-                    <select v-model="patient.genre" class="form-control" id="genre">
-                      <option value="">Sélectionnez...</option>
+                    <select v-model="patient.genre" class="form-control" id="genre" >
+                      <option value="">Genre</option>
                       <option value="homme">Homme</option>
                       <option value="femme">Femme</option>
                     </select>
@@ -175,3 +170,7 @@ export default {
       </div>
   </div>    
 </template>
+
+<style>
+  @import './GestionPatient.css';
+</style>

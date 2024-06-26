@@ -15,3 +15,18 @@
 .bouton {
     max-width: 90px;
 }
+
+.oneForm{
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.selectBox {
+    width: 100%;
+}
+
+
+label{
+    min-width: 100px;
+}
