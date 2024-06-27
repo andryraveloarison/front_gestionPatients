@@ -2,98 +2,80 @@
 <script>
   import { formatDate } from '../../_utils/formatDate';
   import { medecinService } from '../../service/medecin.service';
-  import './GestionMedecin.css'; // Ajustez le chemin selon l'emplacement de votre fichier CSS
+  import './GestionMedecin.css'; 
+  import { useModal } from '../composables/useModal';
+  import Modal from '../Modal/Modal.vue';
   
   
   export default {
-    name: 'Medecin',
-    data () {
-      return {
-        buttonText: 'Ajouter',
-        result: {},
-        medecin:{
-                   nom: '',
-                   prenom: '',
-                   titre: '',
-        }
-      }
+
+    name: "Medecin",
+    data() {
+        return {
+            buttonText: "Ajouter",
+            result: {},
+            medecin: {
+                nom: "",
+                prenom: "",
+                titre: "",
+            },
+            modal: useModal()
+        };
     },
-    
-    created() { 
+    created() {
         this.MedecinLoad();
     },
     mounted() {
-          console.log("mounted() called.......");
+        console.log("mounted() called.......");
     },
     computed: {
-      sortedMedecins() {
-        return Array.isArray(this.result)? this.result.sort((a, b) => a.id - b.id) : [];
-      },
+        sortedMedecins() {
+            return Array.isArray(this.result) ? this.result.sort((a, b) => a.id - b.id) : [];
+        },
     },
-  
-  
     methods: {
-            formatDate,
-            MedecinLoad()
-            {
-                  medecinService.loadData()
-                    .then(
-                        ({data})=>{
-                          this.result = data;
-                        }
-                    );
-            },
-              
-            save()
-            {
-              this.medecin.id == '' ? this.saveData() : this.updateData();
-            },
-  
-  
-            saveData()
-            {
-              medecinService.saveData(this.medecin)
-              .then( ({data})=>{
-                  this.result.push(data)
-                  this.initaliseForm()
-                }
-              )
-  
-            },
-  
-            edit(medecin)
-            {
-              this.buttonText = "editer"
-              this.medecin = medecin;
-            },
-  
-  
-            updateData()
-            {
-                medecinService.updateData(this.medecin)
-                .then(
-                  ({data})=>{
-                    this.initaliseForm()
-                    this.buttonText = "ajouter"
-                    this.MedecinLoad();
-                  }
-                );
-  
-            },
-  
-            remove(medecin){
-                medecinService.deleteData(medecin.id);
-                alert("Supprimer?");
-                this.result = this.result.filter(item => item.id !== medecin.id);
-              },
-  
-              initaliseForm(){
-                    this.medecin.nom = '';
-                    this.medecin.prenom = '',
-                    this.medecin.titre = ''
-              }
-      }
-  }
+        formatDate,
+        MedecinLoad() {
+            medecinService.loadData()
+                .then(({ data }) => {
+                this.result = data;
+            });
+        },
+        save() {
+            this.medecin.id == "" ? this.saveData() : this.updateData();
+        },
+        saveData() {
+            medecinService.saveData(this.medecin)
+                .then(({ data }) => {
+                this.result.push(data);
+                this.initaliseForm();
+            });
+        },
+        edit(medecin) {
+            this.buttonText = "editer";
+            this.medecin = medecin;
+        },
+        updateData() {
+            medecinService.updateData(this.medecin)
+                .then(({ data }) => {
+                this.initaliseForm();
+                this.buttonText = "ajouter";
+                this.MedecinLoad();
+            });
+        },
+        remove(medecin) {
+            medecinService.deleteData(medecin.id);
+            alert("Supprimer?");
+            this.result = this.result.filter(item => item.id !== medecin.id);
+        },
+        initaliseForm() {
+            this.medecin.nom = "";
+            this.medecin.prenom = "",
+                this.medecin.titre = "";
+        }
+    },
+    components: { Modal }
+}
   </script>
   
   <template>
@@ -140,6 +122,8 @@
                               <div class="d-flex justify-content-center gap-2">
                                 <button type="button" class="btn btn-success mr-2" @click="edit(medecin)">Edit</button>
                                 <button type="button" class="btn btn-danger ml-2"  @click="remove(medecin)">Delete</button>
+                                <button type="button" class="btn btn-primary ml-2"  @click="modal.showModal">Voir plus</button>
+
                               </div>
                             </td>
                             </tr>
@@ -148,6 +132,13 @@
                     </table>
             </div>
         </div>
+        <teleport to="#modal-target">
+          <Modal v-if="modal.showModalState">
+            <h1>MODALINA</h1>
+            <button type="button" class="btn btn-primary ml-2"  @click="modal.closeModal">Fermer</button>
+
+          </Modal>
+        </teleport>
     </div>    
   </template>
   
