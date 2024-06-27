@@ -4,6 +4,7 @@
   import { rvService } from '../../service/rv.service';
   import { medecinService } from '../../service/medecin.service';
   import { patientService } from '../../service/patient.service';
+import { creneauxService } from '../../service/creneaux.service';
 
   
   export default {
@@ -12,7 +13,7 @@
       return {
         buttonText: 'Ajouter',
         result: {},
-        resultMedecin:{},
+        resultCreneaux:{},
         resultPatient:{},
         rendezVous:{
                    id: '',
@@ -26,11 +27,6 @@
                    id_creneaux:''
 
         },
-        medecin:{
-                   id: '',
-                   nom: '',
-                   prenom: '',
-        },
         patient: {
                   id: '',
                    nom: '',
@@ -42,7 +38,7 @@
     
     created() { 
         this.RendezVousLoad();
-        this.MedecinLoad();
+        this.CreneauxLoad();
         this.PatientLoad();
     },
 
@@ -55,8 +51,8 @@
         return Array.isArray(this.result)? this.result.sort((a, b) => a.id - b.id) : [];
       },
 
-      sortedMedecin() {
-        return Array.isArray(this.resultMedecin)? this.resultMedecin.sort((a, b) => a.id - b.id) : [];
+      sortedCreneaux() {
+        return Array.isArray(this.resultCreneaux)? this.resultCreneaux.sort((a, b) => a.id - b.id) : [];
       },
 
       sortedPatient() {
@@ -77,12 +73,12 @@
                     );
             },
 
-            MedecinLoad()
+            CreneauxLoad()
             {
-                  medecinService.loadData()
+                  creneauxService.loadData()
                     .then(
                         ({data})=>{
-                          this.resultMedecin = data;
+                          this.resultCreneaux = data;
                         }
                     );
             },
@@ -131,43 +127,38 @@
   
             updateData()
             {
-               /* let creneauxRequest={		
-                  "id" : this.creneaux.id,
-                  "startTime" : this.creneaux.startTime,
-                  "endTime" : this.creneaux.endTime,
-                  "startPause" : this.creneaux.startPause,
-                  "endPause" : this.creneaux.endPause,
-                  "id_medecin" : this.medecin.id
+              let rvRequest={	
+                      "id":this.rendezVous.id,	
+                      "start":this.rendezVous.start,
+                      "end":this.rendezVous.end,
+                      "date":this.rendezVous.date,
+                      "id_creneaux":this.rendezVous.id_creneaux,
+                      "id_patient":this.rendezVous.id_patient
               }
 
-              creneauxService.updateData(creneauxRequest)
+              rvService.updateData(rvRequest)
 
                 .then(
                   ({data})=>{
-                    console.log(data)
                     this.initaliseForm()
                     this.buttonText = "ajouter"
-                    this.CreneauxLoad();
+                    this.RendezVousLoad();
                   }
                 );
 
-                */
   
             },
   
             remove(rendezVous){
                 rvService.deleteData(rendezVous.id);
-                alert("Supprimer");
+                alert("Supprimer?");
                 this.result = this.result.filter(item => item.id !== rendezVous.id);
               },
   
               initaliseForm(){
-                    /*this.creneaux.startTime = '';
-                    this.creneaux.endTime = '',
-                    this.creneaux.startPause = '',
-                    this.creneaux.endPause = '',
-                    this.creneaux.id_medecin = ''*/
-
+                    this.rendezVous.date = '';
+                    this.rendezVous.start = '',
+                    this.rendezVous.end = ''
               }
       }
   }
@@ -187,16 +178,16 @@
 
                     <div class="form-group oneForm">
                       <label>Medecin</label>
-                      <select v-model="medecin.id" class="form selectBox"  required>
-                        <option v-for="medecin in sortedMedecin" v-bind:key="medecin.id" :value="medecin.id">
-                          {{ medecin.nom}}
+                      <select v-model="rendezVous.id_creneaux" class="form selectBox"  required>
+                        <option v-for="creneaux in sortedCreneaux" v-bind:key="creneaux.id" :value="creneaux.id">
+                          {{ creneaux.nomMedecin}}
                         </option>
                       </select>
                     </div>  
 
                     <div class="form-group oneForm">
                       <label>Patient</label>
-                      <select v-model="patient.id" class="form selectBox"  required>
+                      <select v-model="rendezVous.id_patient" class="form selectBox"  required>
                         <option v-for="patient in sortedPatient" v-bind:key="patient.id" :value="patient.id">
                           {{ patient.nom}}
                         </option>

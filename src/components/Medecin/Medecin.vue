@@ -83,7 +83,7 @@
   
             remove(medecin){
                 medecinService.deleteData(medecin.id);
-                alert("Supprimer");
+                alert("Supprimer?");
                 this.result = this.result.filter(item => item.id !== medecin.id);
               },
   
