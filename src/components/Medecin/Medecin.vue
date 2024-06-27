@@ -12,7 +12,6 @@
         buttonText: 'Ajouter',
         result: {},
         medecin:{
-                   id: '',
                    nom: '',
                    prenom: '',
                    titre: '',

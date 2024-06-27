@@ -11,7 +11,6 @@ export default {
       buttonText: 'Ajouter',
       result: {},
       patient:{
-                 id: '',
                  nom: '',
                  email: '',
                  age: '',
