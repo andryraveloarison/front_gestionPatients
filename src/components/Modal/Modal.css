@@ -1,0 +1,15 @@
+.cardModal{
+    border-width: 1px;
+    padding: 20px;
+    border-style: solid;
+    width: 500px;
+    background-color: aliceblue;
+    
+}
+
+.bodyCard {
+    position: absolute;
+    padding: 0;
+    margin-top: -50vh;
+    margin-left: calc(50vw - 250px);
+}
