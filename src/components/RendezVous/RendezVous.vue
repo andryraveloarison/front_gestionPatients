@@ -111,6 +111,7 @@ import { creneauxService } from '../../service/creneaux.service';
               }
               rvService.saveData(rvRequest)
               .then( ({data})=>{
+                  alert(data)
                   this.RendezVousLoad();
                   this.initaliseForm()
                 }
@@ -158,7 +159,9 @@ import { creneauxService } from '../../service/creneaux.service';
               initaliseForm(){
                     this.rendezVous.date = '';
                     this.rendezVous.start = '',
-                    this.rendezVous.end = ''
+                    this.rendezVous.end = '',
+                    this.rendezVous.nom_medecin='',
+                    this.rendezVous.nom_patient='',
               }
       }
   }
