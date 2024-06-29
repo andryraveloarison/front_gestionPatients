@@ -161,7 +161,7 @@ import { creneauxService } from '../../service/creneaux.service';
                     this.rendezVous.start = '',
                     this.rendezVous.end = '',
                     this.rendezVous.nom_medecin='',
-                    this.rendezVous.nom_patient='',
+                    this.rendezVous.nom_patient=''
               }
       }
   }
