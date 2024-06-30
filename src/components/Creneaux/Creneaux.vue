@@ -192,6 +192,8 @@
                         <th scope="col" class="text-center">Nom</th>
                         <th scope="col" class="text-center">Debut</th>
                         <th scope="col" class="text-center">Fin</th>
+                        <th scope="col" class="text-center">Debut Pause</th>
+                        <th scope="col" class="text-center">Fin Pause</th>
                         <th scope="col" class="text-center">action</th>
                         </tr>
                     </thead>
@@ -200,6 +202,8 @@
                             <td class="text-center">{{ creneaux.nomMedecin }}</td>
                             <td class="text-center">{{ creneaux.startTime }}</td>
                             <td class="text-center">{{ creneaux.endTime }}</td>
+                            <td class="text-center">{{ creneaux.startPause }}</td>
+                            <td class="text-center">{{ creneaux.endPause }}</td>
                             <td>
                               <div class="d-flex justify-content-center gap-2">
                                 <button type="button" class="btn btn-success mr-2" @click="edit(creneaux)">Edit</button>
