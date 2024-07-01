@@ -2,7 +2,6 @@
 <script>
   import { formatDate } from '../../_utils/formatDate';
   import { rvService } from '../../service/rv.service';
-  import { medecinService } from '../../service/medecin.service';
   import { patientService } from '../../service/patient.service';
 import { creneauxService } from '../../service/creneaux.service';
 
