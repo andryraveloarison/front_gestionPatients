@@ -31,3 +31,7 @@
 label{
     min-width: 100px;
 }
+
+.actionButton {
+    font-size: 12 ;
+}

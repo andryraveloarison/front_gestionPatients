@@ -16,7 +16,9 @@ let deleteData = (id) => {
     return Axios.delete(`/rv/${id}`)
 }
 
-
+let findByCreneaux = (credentials) => {
+    return Axios.post('/rv/creneaux/', credentials)
+}
 export const rvService = {
-    loadData, saveData, updateData, deleteData
+    loadData, saveData, updateData, deleteData, findByCreneaux
 }
