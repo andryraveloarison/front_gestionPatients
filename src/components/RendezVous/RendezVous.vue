@@ -3,7 +3,8 @@
   import { formatDate } from '../../_utils/formatDate';
   import { rvService } from '../../service/rv.service';
   import { patientService } from '../../service/patient.service';
-import { creneauxService } from '../../service/creneaux.service';
+  import { creneauxService } from '../../service/creneaux.service';
+  import { medecinService } from '../../service/medecin.service';
 
   
   export default {
@@ -12,6 +13,7 @@ import { creneauxService } from '../../service/creneaux.service';
       return {
         buttonText: 'Ajouter',
         result: {},
+        resultMedecin:{},
         resultCreneaux:{},
         resultPatient:{},
         rendezVous:{
@@ -19,18 +21,22 @@ import { creneauxService } from '../../service/creneaux.service';
                    start: '',
                    end: '',
                    date:'',
-                   id_medecin:'',
-                   id_patient:'',
-                   nom_patient:'',
-                   nom_medecin:'',
-                   id_creneaux:''
-
+                   idMedecin:'',
+                   idPatient:'',
+                   nomPatient:'',
+                   nomMedecin:'',
+                   idCreneaux:''
         },
         patient: {
                   id: '',
                    nom: '',
                    prenom: '',
-        }
+        },
+        medecin:{
+                   id: '',
+                   nom: '',
+                   prenom: '',
+        }, 
 
       }
     },
@@ -39,6 +45,8 @@ import { creneauxService } from '../../service/creneaux.service';
         this.RendezVousLoad();
         this.CreneauxLoad();
         this.PatientLoad();
+        this.MedecinLoad();
+
     },
 
     mounted() {
@@ -57,6 +65,10 @@ import { creneauxService } from '../../service/creneaux.service';
       sortedPatient() {
         return Array.isArray(this.resultPatient)? this.resultPatient.sort((a, b) => a.id - b.id) : [];
       },
+
+      sortedMedecin() {
+        return Array.isArray(this.resultMedecin)? this.resultMedecin.sort((a, b) => a.id - b.id) : [];
+      },
     },
   
   
@@ -72,12 +84,24 @@ import { creneauxService } from '../../service/creneaux.service';
                     );
             },
 
+            MedecinLoad()
+            {
+                  medecinService.loadData()
+                    .then(
+                        ({data})=>{
+                          this.resultMedecin = data;
+                          console.log(data)
+                        }
+                    );
+            },
+
             CreneauxLoad()
             {
                   creneauxService.loadData()
                     .then(
                         ({data})=>{
                           this.resultCreneaux = data;
+                          console.log(data)
                         }
                     );
             },
@@ -105,9 +129,10 @@ import { creneauxService } from '../../service/creneaux.service';
                       "start":this.rendezVous.start,
                       "end":this.rendezVous.end,
                       "date":this.rendezVous.date,
-                      "id_creneaux":this.rendezVous.id_creneaux,
-                      "id_patient":this.rendezVous.id_patient
+                      "id_creneaux":this.rendezVous.idCreneaux,
+                      "id_patient":this.rendezVous.idPatient
               }
+              console.log(this.rendezVous.date)
               rvService.saveData(rvRequest)
               .then( ({data})=>{
                   alert(data)
@@ -122,6 +147,10 @@ import { creneauxService } from '../../service/creneaux.service';
             {
               this.buttonText = "editer"
               this.rendezVous = rendezVous;
+              this.rendezVous.nomMedecin = rendezVous.nomMedecin
+              this.rendezVous.idMedecin = rendezVous.idMedecin
+              this.rendezVous.date = formatDate(rendezVous.date)
+
             },
   
   
@@ -132,9 +161,10 @@ import { creneauxService } from '../../service/creneaux.service';
                       "start":this.rendezVous.start,
                       "end":this.rendezVous.end,
                       "date":this.rendezVous.date,
-                      "id_creneaux":this.rendezVous.id_creneaux,
-                      "id_patient":this.rendezVous.id_patient
+                      "id_creneaux":this.rendezVous.idCreneaux,
+                      "id_patient":this.rendezVous.idPatient
               }
+
 
               rvService.updateData(rvRequest)
 
@@ -145,7 +175,7 @@ import { creneauxService } from '../../service/creneaux.service';
                     this.RendezVousLoad();
                   }
                 );
-
+              
   
             },
   
@@ -159,8 +189,8 @@ import { creneauxService } from '../../service/creneaux.service';
                     this.rendezVous.date = '';
                     this.rendezVous.start = '',
                     this.rendezVous.end = '',
-                    this.rendezVous.nom_medecin='',
-                    this.rendezVous.nom_patient=''
+                    this.rendezVous.nomMedecin='',
+                    this.rendezVous.nomPatient=''
               }
       }
   }
@@ -177,19 +207,20 @@ import { creneauxService } from '../../service/creneaux.service';
             <div class="col-md-4 card">
                 <div class="card-body ">
                     <form @submit.prevent="save" class="form">
-
+                
                     <div class="form-group oneForm">
                       <label>Medecin</label>
-                      <select v-model="rendezVous.id_creneaux" class="form selectBox"  required>
+                      <select v-model="rendezVous.idCreneaux" class="form selectBox"  required>
                         <option v-for="creneaux in sortedCreneaux" v-bind:key="creneaux.id" :value="creneaux.id">
                           {{ creneaux.nomMedecin}}
                         </option>
                       </select>
+
                     </div>  
 
                     <div class="form-group oneForm">
                       <label>Patient</label>
-                      <select v-model="rendezVous.id_patient" class="form selectBox"  required>
+                      <select v-model="rendezVous.idPatient" class="form selectBox"  required>
                         <option v-for="patient in sortedPatient" v-bind:key="patient.id" :value="patient.id">
                           {{ patient.nom}}
                         </option>
@@ -227,9 +258,9 @@ import { creneauxService } from '../../service/creneaux.service';
                     </thead>
                     <tbody>
                           <tr v-for="rv in sortedRv" v-bind:key="rv.id">
-                            <td class="text-center">{{ rv.nomMedecin }}</td>
+                            <td class="text-center">{{ rv.nomMedecin }} </td>
                             <td class="text-center">{{ rv.nomPatient }}</td>
-                            <td class="text-center">{{ formatDate(rv.date) }}</td>
+                            <td class="text-center">{{ formatDate(rv.date)}}</td>
                             <td class="text-center">{{ rv.start }}</td>
                             <td class="text-center">{{ rv.end }}</td>
                             <td>

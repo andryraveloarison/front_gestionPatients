@@ -20,7 +20,8 @@ import { rvService } from '../../service/rv.service';
                    endTime: '',
                    startPause:'',
                    endPause:'',
-                   id_medecin:''
+                   id_medecin:'',
+                   nomMedecin:''
         },
         
         medecin:{
@@ -94,7 +95,7 @@ import { rvService } from '../../service/rv.service';
                   "endTime":this.creneaux.endTime,
                   "startPause":this.creneaux.startPause,
                   "endPause":this.creneaux.endPause,
-                  "id_medecin":this.medecin.id
+                  "id_medecin":this.creneaux.id_medecin
               }
               creneauxService.saveData(creneauxRequest)
               .then( ({data})=>{
@@ -109,6 +110,7 @@ import { rvService } from '../../service/rv.service';
             {
               this.buttonText = "editer"
               this.creneaux = creneaux;
+              
             },
   
   
@@ -120,7 +122,7 @@ import { rvService } from '../../service/rv.service';
                   "endTime" : this.creneaux.endTime,
                   "startPause" : this.creneaux.startPause,
                   "endPause" : this.creneaux.endPause,
-                  "id_medecin" : this.medecin.id
+                  "id_medecin" : this.creneaux.id_medecin
               }
 
               creneauxService.updateData(creneauxRequest)
@@ -178,7 +180,7 @@ import { rvService } from '../../service/rv.service';
 
                     <div class="form-group oneForm">
                       <label>Medecin</label>
-                      <select v-model="medecin.id" class="form selectBox"  required>
+                      <select v-model="creneaux.id_medecin" class="form selectBox"  required>
                       <option v-for="medecin in sortedMedecin" v-bind:key="medecin.id" :value="medecin.id">
                         {{ medecin.nom}}
                       </option>
