@@ -7,6 +7,8 @@ import './style.css'; // Ajustez le chemin selon l'emplacement de votre fichier 
   <h1 class="title">Gestion hospitalière</h1>
 
   <nav>
+    <RouterLink to="/login"> Login</RouterLink>
+    <RouterLink to="/register"> Register</RouterLink>
     <RouterLink to="/patient"> Patient</RouterLink>
     <RouterLink to="/medecin"> Medecin</RouterLink>
     <RouterLink to="/creneaux"> Creneaux</RouterLink>

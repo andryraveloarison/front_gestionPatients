@@ -3,8 +3,7 @@
   import { formatDate } from '../../_utils/formatDate';
   import { medecinService } from '../../service/medecin.service';
   import './GestionMedecin.css'; 
-  import { useModal } from '../composables/useModal';
-  import Modal from '../Modal/Modal.vue';
+
   
   
   export default {
@@ -19,7 +18,6 @@
                 prenom: "",
                 titre: "",
             },
-            modal: useModal()
         };
     },
     created() {
@@ -74,7 +72,6 @@
                 this.medecin.titre = "";
         }
     },
-    components: { Modal }
 }
   </script>
   
@@ -122,7 +119,6 @@
                               <div class="d-flex justify-content-center gap-2">
                                 <button type="button" class="btn btn-success mr-2" @click="edit(medecin)">Edit</button>
                                 <button type="button" class="btn btn-danger ml-2"  @click="remove(medecin)">Delete</button>
-                                <button type="button" class="btn btn-primary ml-2"  @click="modal.showModal">Voir plus</button>
 
                               </div>
                             </td>
@@ -132,13 +128,7 @@
                     </table>
             </div>
         </div>
-        <teleport to="#modal-target">
-          <Modal v-if="modal.showModalState">
-            <h1>MODALINA</h1>
-            <button type="button" class="btn btn-primary ml-2"  @click="modal.closeModal">Fermer</button>
 
-          </Modal>
-        </teleport>
     </div>    
   </template>
   
