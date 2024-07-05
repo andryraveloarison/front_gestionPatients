@@ -1,0 +1,17 @@
+
+
+.card{
+    border-width: 1px;
+    padding: 20px;
+    border-style: solid;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.bouton {
+    max-width: 90px;
+}

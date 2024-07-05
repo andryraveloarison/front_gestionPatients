@@ -5,6 +5,17 @@ nav {
   padding: 10px;
 }
 
+.navMenu {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+nav div {
+  display: flex;
+  gap: 20px;
+}
+
 nav > a + a {
   margin-left: 10px;
 }

@@ -1,8 +1,6 @@
 <script>
-import { formatDate } from '../../_utils/formatDate';
-import { patientService } from '../../service/patient.service';
-import './GestionPatient.css'; // Ajustez le chemin selon l'emplacement de votre fichier CSS
 
+import { authService } from "../../service/auth.service";
 
 export default {
   name: 'Register',
@@ -10,91 +8,39 @@ export default {
     return {
       buttonText: 'Ajouter',
       result: {},
-      patient:{
-                 nom: '',
-                 email: '',
-                 age: '',
-                 dateDeNaissance:'',
-                 genre:''
-
+      user:{
+                 username: '',
+                 password: '',
+                 role:''
       }
     }
   },
   
-  created() { 
-      this.PatientLoad();
-  },
+
   mounted() {
         console.log("mounted() called.......");
   },
-  computed: {
-    sortedPatients() {
-      return Array.isArray(this.result)? this.result.sort((a, b) => a.id - b.id) : [];
-    },
-  },
+
 
 
   methods: {
-          formatDate,
-          PatientLoad()
-          {
-                patientService.loadData()
-                  .then(
-                      ({data})=>{
-                        this.result = data;
-                      }
-                  );
-          },
-            
-          save()
-          {
-            this.patient.id == '' ? this.saveData() : this.updateData();
-          },
 
-
-          saveData()
-          {
-            patientService.saveData(this.patient)
+          register() {
+            authService.register(this.user)
             .then( ({data})=>{
-                this.result.push(data)
+                if(data){
+                  alert('Inscrition reussi')
+                  router.push('/login'); // Remplacez '/login' par le chemin de votre page de connexion
                 this.initaliseForm()
-              }
-            )
-
-          },
-
-          edit(patient)
-          {
-            this.buttonText = "editer"
-            this.patient = patient;
-          },
-
-
-          updateData()
-          {
-              patientService.updateData(this.patient)
-              .then(
-                ({data})=>{
-                  this.initaliseForm()
-                  this.buttonText = "ajouter"
-                  this.PatientLoad();
                 }
-              );
-
+              
+              })
           },
 
-          remove(patient){
-              patientService.deleteData(patient.id);
-              alert("Supprimer");
-              this.result = this.result.filter(item => item.id !== patient.id);
-            },
 
             initaliseForm(){
-                  this.patient.nom = '';
-                  this.patient.email = '',
-                  this.patient.age = '',
-                  this.patient.genre = '',
-                  this.patient.dateDeNaissance = ''
+                  this.user.username = '',
+                  this.user.password = ''
             }
     }
 }
@@ -104,38 +50,32 @@ export default {
   <div class="container">
       <div class="row justify-content-center">
           <div class="col-md-10">
-              <h3 class="text-center text-dark mt-3 mb-3">REGISTER</h3>
+              <h3 class="text-center text-dark mt-3 mb-3">CONNEXION</h3>
           </div>
       </div>
       <div class="row">
-        <div class="col-md-4 card">
-              <div class="card-body">
-                  <form @submit.prevent="save" class="form">
+              <div class="card-body card">
+                  <form @submit.prevent="register" class="form">
                   <div class="form-group">
-                      <input type="text" v-model="patient.nom" class="form-control" placeholder="nom">
-                   
+                      <input type="text" v-model="user.username" class="form-control" placeholder="nom">                 
                   </div>
                   <div class="form-group">
-                      <input type="email" v-model="patient.email" class="form-control" placeholder="email" >
+                      <input type="password" v-model="user.password" class="form-control" placeholder="mot de passe">                 
                   </div>
+
                   <div class="form-group">
-                      <input type="date" v-model="patient.dateDeNaissance" class="form-control" placeholder="Date de naissance" >
-                  </div>
-                  <div class="form-group">
-                      <input type="number" v-model="patient.age" class="form-control" placeholder="age" >
-                  </div>
-                  <div class="form-group">
-                    <select v-model="patient.genre" class="form-control" id="genre" >
-                      <option value="">Genre</option>
-                      <option value="homme">Homme</option>
-                      <option value="femme">Femme</option>
+                    <select v-model="user.role" class="form-control" id="genre" >
+                      <option value="">ROle</option>
+                      <option value="ROLE_PATIENT">Patient</option>
+                      <option value="ROLE_MEDECIN">Medecin</option>
+                      <option value="ROLE_ADMIN">Admin</option>
                     </select>
-                  </div>  
-                  <button type="submit" class="btn btn-primary mt-2">{{buttonText}}</button>
+                  </div> 
+
+                  <button type="submit" class="btn btn-primary mt-2">Se connecter</button>
                   </form>
               </div>
-          </div>
-          
+            
       </div>
   </div>    
 </template>
