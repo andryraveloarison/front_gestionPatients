@@ -1,6 +1,7 @@
 <script>
 
 import { authService } from "../../service/auth.service";
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'Login',
@@ -23,29 +24,51 @@ export default {
 
 
   methods: {
-
+ 
           login() {
-            authService.login(this.user)
-            .then( ({data})=>{
-                console.log("*************")
-                alert(data.token)
-                localStorage.setItem('token', data.token);
-                
-                const parts = data.token.split('.');
+           
+                authService.login(this.user)
+                .then( ({data})=>{
+                  if(data.token){
+                    
+                    localStorage.setItem('token', data.token);
+                    
+                    const parts = data.token.split('.');
 
-                // Décoded le payload (la deuxième partie du token)
-                const decodedPayload = atob(parts[1]);
+                    // Décoded le payload (la deuxième partie du token)
+                    const decodedPayload = atob(parts[1]);
 
-                // Convertit le payload décodé en objet JSON
-                const payload = JSON.parse(decodedPayload);
+                    // Convertit le payload décodé en objet JSON
+                    const payload = JSON.parse(decodedPayload);
 
-                console.log(payload.sub)
-                console.log("*************")
+                    const role = payload.sub.split(",")[1]
+                    const router = this.$router; // Utilisez $router ici
+                    
+                    alert("Connexion reussi!");
 
-                this.initaliseForm()
-              })
+                    if(role == 'ROLE_PATIENT'){
+                      router.push('/patient'); // Remplacez '/login' par le chemin de votre page de connexion
+                    }
+
+                    if(role == 'ROLE_MEDECIN'){
+                      router.push('/medecin'); // Remplacez '/login' par le chemin de votre page de connexion
+                    }
+
+                    if(role == 'ROLE_ADMIN'){
+                      router.push('/rendezVous'); // Remplacez '/login' par le chemin de votre page de connexion
+                    }
+
+                    this.initaliseForm()
+
+                  }else {
+                    alert("Erreur lors de la connexion")
+                  }
+
+              }).catch((error) => {
+                alert("Mauvais utilisateur ou mot de passe");
+                console.error(error); // Ajoutez également un journal pour le débogage
+              });
           },
-
 
             initaliseForm(){
                   this.user.username = '',

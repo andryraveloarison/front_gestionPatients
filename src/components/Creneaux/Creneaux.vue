@@ -67,7 +67,10 @@ import { rvService } from '../../service/rv.service';
                         ({data})=>{
                           this.result = data;
                         }
-                    );
+                    ).catch((error) => {
+                    const router = this.$router; // Utilisez $router ici
+                    this.$router.go(-1);
+                  });;
             },
 
             MedecinLoad()

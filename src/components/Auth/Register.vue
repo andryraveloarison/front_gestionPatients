@@ -1,6 +1,8 @@
 <script>
 
 import { authService } from "../../service/auth.service";
+import { useRouter } from 'vue-router';
+
 
 export default {
   name: 'Register',
@@ -29,9 +31,10 @@ export default {
             authService.register(this.user)
             .then( ({data})=>{
                 if(data){
+                  const router = useRouter();
                   alert('Inscrition reussi')
                   router.push('/login'); // Remplacez '/login' par le chemin de votre page de connexion
-                this.initaliseForm()
+                  this.initaliseForm()
                 }
               
               })
@@ -50,7 +53,7 @@ export default {
   <div class="container">
       <div class="row justify-content-center">
           <div class="col-md-10">
-              <h3 class="text-center text-dark mt-3 mb-3">CONNEXION</h3>
+              <h3 class="text-center text-dark mt-3 mb-3">INSCRIPTION</h3>
           </div>
       </div>
       <div class="row">
@@ -65,7 +68,7 @@ export default {
 
                   <div class="form-group">
                     <select v-model="user.role" class="form-control" id="genre" >
-                      <option value="">ROle</option>
+                      <option value="">Role</option>
                       <option value="ROLE_PATIENT">Patient</option>
                       <option value="ROLE_MEDECIN">Medecin</option>
                       <option value="ROLE_ADMIN">Admin</option>

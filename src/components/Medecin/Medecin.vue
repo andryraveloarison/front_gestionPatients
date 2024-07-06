@@ -37,7 +37,9 @@
             medecinService.loadData()
                 .then(({ data }) => {
                 this.result = data;
-            });
+            }).catch((error) => {
+                    this.$router.go(-1);
+                  });;
         },
         save() {
             this.medecin.id == "" ? this.saveData() : this.updateData();
